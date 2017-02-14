@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+    defaultConfig {
+        applicationId "com.rba.hellondk"
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+            }
+        }
+
+        task ndkBuild(type: Exec) {
+            /*
+            if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+                //commandLine 'ndk-build.cmd', '-C', file('src/main').absolutePath
+            } else {
+                //commandLine 'ndk-build', '-C', file('src/main').absolutePath
+                commandLine '/Users/ricardobravo/Library/Android/sdk/ndk-bundle', '-C', file('src/main/cpp').absolutePath
+            }
+            */
+            commandLine '/Users/ricardobravo/Library/Android/sdk/ndk-bundle', '-C', file('src/main/cpp').absolutePath
+        }
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    testCompile 'junit:junit:4.12'
+}
